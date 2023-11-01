@@ -2,7 +2,7 @@ const Login = () => {
     const scopes = ["user-read-currently-playing"];
     const str = new URLSearchParams({
       response_type: "code",
-      client_id: process.env.REACT_APP_CLIENT_ID,
+      client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
       scope: scopes.join(" "),
       redirect_uri: `${process.env.REACT_APP_SITE_BASE_URL}/currently-playing`,
       show_dialog: "true",

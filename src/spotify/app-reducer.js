@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSpotifyCurrentSongThunk } from "./app-thunks";
+import { getLyricsThunk, getSpotifyCurrentSongThunk } from "./app-thunks";
 
 const initialState = {
   currentSong: null,
+  lyrics: "",
 };
 
 const AppReducer = createSlice({
@@ -14,6 +15,14 @@ const AppReducer = createSlice({
       console.log(action.payload)
     },
     [getSpotifyCurrentSongThunk.rejected]: (state, action) => {
+        console.log("getSpotifyCurrentSongThunk.rejected");
+        console.log(action);
+    },
+    [getLyricsThunk.fulfilled]: (state, action) => {
+      state.lyrics = action.payload;
+      console.log(action.payload)
+    },
+    [getLyricsThunk.rejected]: (state, action) => {
         console.log("getSpotifyCurrentSongThunk.rejected");
         console.log(action);
     },

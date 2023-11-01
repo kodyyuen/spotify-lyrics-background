@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getSpotifyCurrentSongThunk } from "../spotify/app-thunks";
+import { getLyricsThunk, getSpotifyCurrentSongThunk } from "../spotify/app-thunks";
 
 const GradientBackground = () => {
   const [gradient, setGradient] = useState(["red", "blue", "yellow"]);
   const [lastCurrentSong, setLastCurrentSong] = useState("");
   const [repeat, setRepeat] = useState(true)
-  const { currentSong } = useSelector((state) => state.app);
+  const { currentSong, lyrics } = useSelector((state) => state.app);
   let timer;
   const dispatch = useDispatch();
 
@@ -34,6 +34,7 @@ const GradientBackground = () => {
 
   const updateCurrentSong = (repeat) => {
     console.log('updateCurrentSong')
+    console.log('repeat: ' + repeat)
     if (repeat) {
       dispatch(getSpotifyCurrentSongThunk());
       timer = setTimeout(updateCurrentSong, 10000);
@@ -54,6 +55,13 @@ const GradientBackground = () => {
     updateCurrentSong(true);
   }, []);
 
+  useEffect(() => {
+    if (currentSong && lastCurrentSong !== currentSong) {
+      dispatch(getLyricsThunk({track: currentSong.item.name, artist: currentSong.item.artists[0].name}))
+      setLastCurrentSong(currentSong);
+    }
+  }, [currentSong])
+
   return (
     <div
       key={getRandomKey()}
@@ -64,7 +72,8 @@ const GradientBackground = () => {
         currentSong &&
       <h1>{currentSong.item.name}</h1>
       }
-      <h1>1</h1>
+      <br></br>
+      <h1>{lyrics}</h1>
       <button onClick={() => toggleCurrentSongFunc()}>Click me</button>
     </div>
   );
